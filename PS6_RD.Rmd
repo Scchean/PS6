@@ -43,9 +43,15 @@ The original data used in the paper is confidential. The authors instead provide
 library(dplyr)
 library(tidyr)
 library(lfe)
+library(readr)
 library(stargazer)
 library(foreign)
 library(haven)
+library(lubridate)
+library(data.table)
+library(ggplot2)
+library(broom)
+
 ```
 
 Load any R packages you will be using:
@@ -81,12 +87,15 @@ Load any R packages you will be using:
 Drop all other variables. If needed, give the variables you are keeping more intuitive names. 
 
 ```{r}
-Data_1 <- read.dta("/Users/shyhc/Downloads/Government Transfers_Replication/reg_panes.dta")
+data_1 <- read.dta("/Users/shyhc/Downloads/Government Transfers_Replication/reg_panes.dta")
 ```
 
 **Code:**
 ```{r}
+data_select <- data_1 %>% select(aprobado, untracked07, h_89, hv34, ind_reest, newtreat, geo,bl_medad, lnbl_ytoth_pc, bl_hhsize, bl_meduc, missbl_medad, misslnbl_ytoth_pc, missbl_hhsize, missbl_meduc, sexo, edad, aniosed07, misssexo, missedad, missaniosed)
 
+data_select <- plyr::rename(data_select,c(aprobado="Received PANES 2005 - 2007", untracked07 ="untracked in 2007" , h_89 ="support government in 2007", hv34 = "support govenrment in 2008", ind_reest= "predicted income", newtreat = "PANES eligibility", geo = "location", bl_medad ="age", lnbl_ytoth_pc ="log per capita income", bl_hhsize = "household size",bl_meduc ="education", missbl_medad = "missing age", misslnbl_ytoth_pc= "missing log per capita income", missbl_hhsize="missing household size", missbl_meduc ="missing education", sexo = "respondent is female", edad= "respondent's age", aniosed07 ="education in 2017", misssexo = "missing respondent gender", missedad ="missing respondent's age", missaniosed = "missing respondent's education" ))
+View(data_select)
 
 ```
 
@@ -97,12 +106,20 @@ Data_1 <- read.dta("/Users/shyhc/Downloads/Government Transfers_Replication/reg_
 -An indicator for receiving PANES that is NA if a respondent is untracked in 2007
 
 **Code:**
+```{r}
+
+is.na(data_select$`untracked in 2007`) <- !data_select$`untracked in 2007`
+
+```
 
 ## **Question: We are going to re-scale the variables that indicate support for the current government so that responses range from 0 to 1. To do this, tabulate the current variable to see how it is distributed and then generate a variable that will be NA if it is currently coded as 9, 0 if currently 2, 0.5 if currently 1 and 1 if currently 3. Do this for both the 2007 and 2008 variable. **
 
 Note: This is how the authors modify this variable in their code. It seems counter intuitive and does not correspond to the description of how this variable is coded in the survey questionnaire as reported in their appendix though it does correspond to their discussion in footnote 12. My guess is the transcription/translation of the survey question is incorrect.
 
 **Code:**
+```{r}
+
+```
 
 
 ## **Question: Generate a variable that is the square of predicted income.**
